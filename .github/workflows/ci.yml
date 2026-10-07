@@ -1,0 +1,53 @@
+name: Rimuru OS CI & Verification
+
+on:
+  push:
+    branches:
+      - production
+      - main
+      - master
+  pull_request:
+    branches:
+      - production
+      - main
+      - master
+
+jobs:
+  lint-and-validate:
+    name: Lint & Validate System Architecture
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Validate Python Scripts
+        run: |
+          python3 -m py_compile apps/rimuru-store/rimuru_store.py
+          python3 -m py_compile orchestrator/src/orchestrator_daemon.py
+          python3 -m py_compile archiso/airootfs/usr/bin/rimuru-store
+          python3 -m py_compile archiso/airootfs/usr/bin/rimuru-orchestratord
+          echo "All Python scripts passed syntax checks."
+
+      - name: Validate Shell Scripts
+        run: |
+          bash -n scripts/build-iso.sh
+          bash -n scripts/make-repo.sh
+          bash -n scripts/test-qemu.sh
+          bash -n archiso/profiledef.sh
+          bash -n archiso/airootfs/usr/bin/rimuru
+          bash -n archiso/airootfs/usr/bin/rimuru-snapshot
+          echo "All shell scripts passed syntax checks."
+
+      - name: Validate Archiso Manifest
+        run: |
+          test -f archiso/profiledef.sh
+          test -f archiso/packages.x86_64
+          test -f archiso/pacman.conf
+          test -f archiso/airootfs/etc/os-release
+          echo "Archiso profile structure verified."

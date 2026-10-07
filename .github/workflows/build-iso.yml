@@ -1,0 +1,47 @@
+name: Build Rimuru OS Live ISO
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-iso:
+    name: Build Bootable Archiso Image
+    runs-on: ubuntu-latest
+    container:
+      image: archlinux:latest
+      options: --privileged
+
+    steps:
+      - name: Install Build Prerequisites
+        run: |
+          pacman -Syu --noconfirm
+          pacman -S --noconfirm --needed archiso git bash coreutils squashfs-tools zstd libisoburn
+
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Prepare Local Repository
+        run: |
+          chmod +x scripts/*.sh
+          ./scripts/make-repo.sh
+
+      - name: Build ISO via mkarchiso
+        run: |
+          mkdir -p out
+          mkarchiso -v -w /tmp/archiso-work -o out archiso/
+
+      - name: Generate Checksums
+        run: |
+          cd out
+          sha256sum rimuru-os-*.iso > sha256sums.txt
+          cat sha256sums.txt
+
+      - name: Upload ISO Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: rimuru-os-live-iso
+          path: out/
+          retention-days: 7
