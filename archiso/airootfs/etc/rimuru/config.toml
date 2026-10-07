@@ -1,0 +1,44 @@
+# /etc/rimuru/config.toml
+# System-wide configuration for Rimuru OS
+
+[system]
+hostname = "rimuru"
+timezone = "UTC"
+locale = "en_US.UTF-8"
+default_shell = "/bin/bash"
+
+[desktop]
+compositor = "hyprland"
+terminal = "ghostty"
+multiplexer = "tmux"
+bar = "rimuru-shell"
+theme = "rimuru-cyan-dark"
+font = "JetBrainsMono Nerd Font"
+quick_share_enabled = true
+
+[storage]
+filesystem = "btrfs"
+snapshots_enabled = true
+snapper_config = "root"
+auto_snapshot_pacman = true
+auto_snapshot_agent = true
+max_snapshots = 50
+
+[orchestrator]
+enabled = true
+listen_socket = "/run/rimuru/orchestratord.sock"
+dbus_service = "org.rimuru.Orchestrator"
+sandbox_mode = "bwrap"
+max_parallel_workers = 4
+
+[orchestrator.models]
+default_local_provider = "ollama"
+default_local_model = "qwen2.5-coder:7b"
+default_cloud_provider = "anthropic"
+default_cloud_model = "claude-3-7-sonnet-latest"
+auto_route = true
+
+[orchestrator.memory]
+vector_db = "sqlite-vec"
+db_path = "/var/lib/rimuru/memory.db"
+context_window_limit = 32000

@@ -1,0 +1,16 @@
+[Unit]
+Description=Rimuru OS Autonomous Orchestrator Daemon
+After=network.target dbus.service
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/rimuru-orchestratord
+Restart=always
+RestartSec=3
+StandardOutput=journal
+StandardError=journal
+AmbientCapabilities=CAP_SYS_ADMIN
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target

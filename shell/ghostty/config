@@ -1,0 +1,50 @@
+# ==============================================================================
+# Rimuru OS — Ghostty Terminal Configuration
+# ==============================================================================
+
+font-family = "JetBrainsMono Nerd Font"
+font-size = 13.0
+line-height = 1.2
+
+# Window Appearance
+window-padding-x = 12
+window-padding-y = 10
+window-decoration = false
+background-opacity = 0.92
+background-blur = true
+
+# Theme: Rimuru Cyan Twilight
+palette = 0=#1f2335
+palette = 1=#f7768e
+palette = 2=#9ece6a
+palette = 3=#e0af68
+palette = 4=#7aa2f7
+palette = 5=#bb9af7
+palette = 6=#7dcfff
+palette = 7=#c0caf5
+palette = 8=#414868
+palette = 9=#f7768e
+palette = 10=#9ece6a
+palette = 11=#e0af68
+palette = 12=#7aa2f7
+palette = 13=#bb9af7
+palette = 14=#7dcfff
+palette = 15=#c0caf5
+
+background = #1a1b26
+foreground = #c0caf5
+selection-background = #33467c
+selection-foreground = #c0caf5
+cursor-color = #7dcfff
+cursor-style = bar
+cursor-blink = true
+
+# Performance
+gpu-renderer = auto
+vsync = true
+
+# Shell Integration
+shell-integration = detected
+mouse-hide-while-typing = true
+copy-on-select = clipboard
+confirm-close-surface = false

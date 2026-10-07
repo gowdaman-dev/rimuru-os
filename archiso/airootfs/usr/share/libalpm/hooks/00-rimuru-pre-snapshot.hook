@@ -1,0 +1,11 @@
+[Trigger]
+Operation = Install
+Operation = Upgrade
+Operation = Remove
+Type = Package
+Target = *
+
+[Action]
+Description = Creating Rimuru Btrfs Pre-Transaction Snapshot...
+When = PreTransaction
+Exec = /usr/bin/rimuru-snapshot create-pre

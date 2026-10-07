@@ -1,0 +1,12 @@
+NAME="Rimuru OS"
+PRETTY_NAME="Rimuru OS (Rolling)"
+ID=rimuru
+ID_LIKE=arch
+BUILD_ID="rolling"
+VERSION_ID="1.0"
+ANSI_COLOR="38;2;125;207;255"
+HOME_URL="https://rimuru-os.org/"
+DOCUMENTATION_URL="https://docs.rimuru-os.org/"
+SUPPORT_URL="https://discord.gg/rimuru-os"
+BUG_REPORT_URL="https://github.com/gowdaman/rimuru-os/issues"
+LOGO=rimuru

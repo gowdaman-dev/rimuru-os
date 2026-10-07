@@ -1,0 +1,96 @@
+#!/usr/bin/env bash
+# /usr/bin/rimuru-snapshot
+# Unified Snapshot & Rollback Controller for Rimuru OS
+
+set -euo pipefail
+
+SNAPPER_CONFIG="root"
+
+usage() {
+    cat <<EOF
+Rimuru OS Snapshot & Rollback Manager
+
+Usage:
+  rimuru-snapshot list                     List all existing system snapshots
+  rimuru-snapshot create [description]     Create a manual checkpoint snapshot
+  rimuru-snapshot rollback <snapshot_id>   Instantly rollback system to a snapshot
+  rimuru-snapshot diff <id1> <id2>         Display file differences between snapshots
+  rimuru-snapshot delete <snapshot_id>     Remove a snapshot
+  rimuru-snapshot create-pre               Internal hook for pacman/orchestrator pre-snapshot
+  rimuru-snapshot create-post              Internal hook for pacman/orchestrator post-snapshot
+
+EOF
+    exit 1
+}
+
+ensure_btrfs() {
+    if ! command -v snapper >/dev/null 2>&1; then
+        echo "[rimuru-snapshot] Snapper is not installed. Snapshot skipped."
+        exit 0
+    fi
+}
+
+case "${1:-}" in
+    list)
+        ensure_btrfs
+        snapper -c "$SNAPPER_CONFIG" list
+        ;;
+    create)
+        ensure_btrfs
+        desc="${2:-Manual Rimuru User Snapshot}"
+        id=$(snapper -c "$SNAPPER_CONFIG" create -d "$desc" --print-number)
+        echo "[rimuru-snapshot] Created snapshot #$id: '$desc'"
+        ;;
+    create-pre)
+        ensure_btrfs
+        if [ ! -d "/.snapshots" ]; then exit 0; fi
+        id=$(snapper -c "$SNAPPER_CONFIG" create -t pre -p -d "Pacman/Orchestrator Transaction" --print-number 2>/dev/null || true)
+        if [ -n "$id" ]; then
+            echo "$id" > /tmp/rimuru_last_pre_snap
+            echo "[rimuru-snapshot] Created pre-snapshot #$id"
+        fi
+        ;;
+    create-post)
+        ensure_btrfs
+        if [ ! -d "/.snapshots" ]; then exit 0; fi
+        pre_id=""
+        if [ -f /tmp/rimuru_last_pre_snap ]; then
+            pre_id=$(cat /tmp/rimuru_last_pre_snap)
+            rm -f /tmp/rimuru_last_pre_snap
+        fi
+        if [ -n "$pre_id" ]; then
+            post_id=$(snapper -c "$SNAPPER_CONFIG" create -t post --pre-number "$pre_id" -d "Transaction Complete" --print-number 2>/dev/null || true)
+            echo "[rimuru-snapshot] Created post-snapshot #$post_id (paired with #$pre_id)"
+        fi
+        ;;
+    rollback)
+        ensure_btrfs
+        target_id="${2:-}"
+        if [ -z "$target_id" ]; then
+            echo "Error: snapshot ID required for rollback"
+            exit 1
+        fi
+        echo "[rimuru-snapshot] Initiating atomic rollback to snapshot #$target_id..."
+        snapper -c "$SNAPPER_CONFIG" rollback "$target_id"
+        echo "[rimuru-snapshot] System restored to snapshot #$target_id! Please reboot to activate."
+        ;;
+    diff)
+        ensure_btrfs
+        id1="${2:-}"
+        id2="${3:-}"
+        if [ -z "$id1" ] || [ -z "$id2" ]; then
+            echo "Error: Two snapshot IDs required: rimuru-snapshot diff <id1> <id2>"
+            exit 1
+        fi
+        snapper -c "$SNAPPER_CONFIG" status "$id1".."$id2"
+        ;;
+    delete)
+        ensure_btrfs
+        target_id="${2:-}"
+        snapper -c "$SNAPPER_CONFIG" delete "$target_id"
+        echo "[rimuru-snapshot] Deleted snapshot #$target_id."
+        ;;
+    *)
+        usage
+        ;;
+esac

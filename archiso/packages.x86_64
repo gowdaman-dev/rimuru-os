@@ -1,0 +1,114 @@
+# ==============================================================================
+# Rimuru OS - Live ISO Package Manifest
+# ==============================================================================
+
+# Core Operating System & Kernel
+base
+base-devel
+linux
+linux-firmware
+linux-headers
+btrfs-progs
+e2fsprogs
+dosfstools
+gptfdisk
+parted
+efibootmgr
+systemd
+systemd-sysvcompat
+polkit
+sudo
+
+# Networking & Connectivity
+networkmanager
+network-manager-applet
+wireless_tools
+wpa_supplicant
+iwd
+bluez
+bluez-utils
+openssh
+curl
+wget
+rsync
+git
+
+# Audio & Media Subsystem
+pipewire
+pipewire-alsa
+pipewire-pulse
+pipewire-jack
+wireplumber
+pavucontrol
+
+# Wayland & Hyprland Compositor Ecosystem
+hyprland
+hyprpaper
+hyprlock
+hypridle
+hyprcursor
+hyprutils
+xdg-desktop-portal
+xdg-desktop-portal-hyprland
+xdg-desktop-portal-gtk
+xorg-xwayland
+qt5-wayland
+qt6-wayland
+wl-clipboard
+grim
+slurp
+swappy
+hyprland-preview-share-picker
+
+# Default Terminal & Multiplexer
+ghostty
+tmux
+
+# Shell & Utilities
+bash-completion
+zsh
+starship
+fastfetch
+btop
+fzf
+ripgrep
+fd
+bat
+jq
+tree
+
+# Sandboxing & Orchestrator Prerequisites
+bubblewrap
+cgroup-tools
+libseccomp
+sqlite
+
+# Snapshot & Recovery Engine
+snapper
+snap-pac
+grub-btrfs
+inotify-tools
+
+# Desktop UI & Shell Helpers
+waybar
+rofi-wayland
+mako
+libnotify
+polkit-gnome
+brightnessctl
+playerctl
+nautilus
+adwaita-icon-theme
+ttf-jetbrains-mono-nerd
+noto-fonts
+noto-fonts-emoji
+noto-fonts-cjk
+
+# Installer & Hardware Drivers
+mesa
+vulkan-intel
+vulkan-radeon
+vulkan-nouveau
+xf86-video-amdgpu
+xf86-video-ati
+calamares

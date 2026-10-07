@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Rimuru Software Center
+GenericName=Package Installer
+Comment=1-Click Software Installation with AI Insights
+Exec=rimuru-store
+Icon=system-software-install
+Terminal=false
+Type=Application
+Categories=System;PackageManager;GTK;
+StartupNotify=true

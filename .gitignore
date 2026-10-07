@@ -1,0 +1,23 @@
+# Build outputs & ISO files
+out/
+*.iso
+*.img
+work/
+/tmp/
+
+# Arch repository DB binaries
+*.pkg.tar.zst
+*.db.tar.zst
+*.files.tar.zst
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Rust / Cargo artifacts
+target/
+Cargo.lock
+
+# Logs and runtime sockets
+*.sock
+*.log
