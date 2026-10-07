@@ -79,7 +79,6 @@ tree
 
 # Sandboxing & Orchestrator Prerequisites
 bubblewrap
-cgroup-tools
 libseccomp
 sqlite
 
@@ -91,7 +90,7 @@ inotify-tools
 
 # Desktop UI & Shell Helpers
 waybar
-rofi-wayland
+wofi
 mako
 libnotify
 polkit-gnome
@@ -111,4 +110,4 @@ vulkan-radeon
 vulkan-nouveau
 xf86-video-amdgpu
 xf86-video-ati
-calamares
+archinstall
